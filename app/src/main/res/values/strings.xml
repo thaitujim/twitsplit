@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TwitSplit</string>
+    <string name="main_title">This is my assignment</string>
+    <string name="main_button_post">Twit</string>
+
+    <string name="input_message_hint">input your twit message</string>
+    <string name="input_message_sample">I can\'t believe Tweeter now supports chunking my messages, so I don\'t have to do it myself.</string>
+</resources>
