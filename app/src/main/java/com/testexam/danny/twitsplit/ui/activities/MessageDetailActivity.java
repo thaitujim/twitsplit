@@ -1,6 +1,7 @@
 package com.testexam.danny.twitsplit.ui.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.testexam.danny.twitsplit.R;
+import com.testexam.danny.twitsplit.modal.Twit;
 import com.testexam.danny.twitsplit.services.TweetUploadService;
 import com.testexam.danny.twitsplit.ui.adapter.MessageAdapter;
 import com.testexam.danny.twitsplit.ui.dialog.MessageDialog;
@@ -25,12 +27,14 @@ import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 
+import java.util.ArrayList;
+
 public class MessageDetailActivity extends AppCompatActivity {
 
 
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
-    private String[] result;
+    private ArrayList<Twit> twitlist;
     private static final String TAG = MessageDetailActivity.class.getName();
     private ProgressDialog progressDialog;
     private static TweetSuccessReceiver tweetSuccessReceiver;
@@ -45,10 +49,17 @@ public class MessageDetailActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         Bundle bundle = getIntent().getExtras();
-        final String[] result = (String[]) bundle.getSerializable(MainActivity.MESSAGE_LIST);
-        this.result = result;
+        this.twitlist =  (ArrayList<Twit>) bundle.getSerializable(MainActivity.MESSAGE_LIST);
+        if (twitlist == null){
+            MessageDialog.showMessageError(this, "Error!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MessageDetailActivity.this.finish();
+                }
+            });
+        }
 
-        mAdapter = new MessageAdapter(result);
+        mAdapter = new MessageAdapter(twitlist);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -59,7 +70,7 @@ public class MessageDetailActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                String message = result[position];
+                String message = twitlist.get(position).getMessage();
                 twitMessage(message, position);
             }
 
@@ -127,6 +138,10 @@ public class MessageDetailActivity extends AppCompatActivity {
     }
 
     public void updateList(){
-        
+        if(currentTweet != -1){
+            mAdapter.getTweetedList().set(currentTweet, true);
+            currentTweet = -1;
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }

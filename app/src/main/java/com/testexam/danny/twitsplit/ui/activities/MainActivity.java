@@ -1,8 +1,8 @@
 package com.testexam.danny.twitsplit.ui.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +10,11 @@ import android.widget.EditText;
 
 import com.testexam.danny.twitsplit.R;
 import com.testexam.danny.twitsplit.exception.MessageException;
+import com.testexam.danny.twitsplit.modal.Twit;
 import com.testexam.danny.twitsplit.ui.dialog.MessageDialog;
 import com.testexam.danny.twitsplit.utility.MessageUtil;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,8 +45,14 @@ public class MainActivity extends AppCompatActivity {
     private void processMessage(String message){
         try {
             String[] result = MessageUtil.splitMessage(message);
+            ArrayList<Twit> twitlist = new ArrayList<>();
+            int length = result.length;
+            for (int i=0;i<result.length;i++){
+                twitlist.add(new Twit(i,length,result[i]));
+            }
+
             Bundle bundle = new Bundle();
-            bundle.putSerializable(MESSAGE_LIST, result);
+            bundle.putSerializable(MESSAGE_LIST, twitlist);
 
             Intent intent = new Intent(this, MessageDetailActivity.class);
             intent.putExtras(bundle);

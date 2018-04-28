@@ -24,6 +24,14 @@ public class MessageDialog {
                 .show();
     }
 
+    public static final AlertDialog showMessageError(Context context, String message, DialogInterface.OnClickListener onClickListener){
+        return new AlertDialog.Builder(context)
+                .setTitle("Error?")
+                .setMessage(message)
+                .setPositiveButton("OK", onClickListener)
+                .show();
+    }
+
     public static final ProgressDialog showProgressDialog(Context context,ProgressDialog progressDialog){
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Twit twit...");

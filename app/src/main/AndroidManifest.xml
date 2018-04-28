@@ -10,18 +10,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.LoginActivity">
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.MainActivity">
-        </activity>
-        <activity android:name=".ui.activities.MessageDetailActivity">
-        </activity>
-        <service android:enabled="true" android:name=".services.TweetUploadService" />
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.activities.MessageDetailActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <service
+            android:name=".services.TweetUploadService"
+            android:enabled="true" />
     </application>
 
 </manifest>

@@ -12,7 +12,9 @@ import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -28,26 +30,35 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initMandatory();
         setContentView(R.layout.activity_login);
-        loginButton = (TwitterLoginButton) findViewById(R.id.login_button);
 
-        loginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
-                // Start Main activity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+                .getActiveSession();
 
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-                Log.d(TAG,exception.toString());
-            }
-        });
+        final TwitterAuthToken token = session.getAuthToken();
+        if (token == null) {
+            loginButton = (TwitterLoginButton) findViewById(R.id.login_button);
 
+            loginButton.setCallback(new Callback<TwitterSession>() {
+                @Override
+                public void success(Result<TwitterSession> result) {
+                    // Do something with result, which provides a TwitterSession for making API calls
+                    // Start Main activity
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
 
-
+                @Override
+                public void failure(TwitterException exception) {
+                    // Do something on failure
+                    Log.d(TAG,exception.toString());
+                }
+            });
+        }else{
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     @Override
