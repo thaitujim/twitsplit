@@ -1,6 +1,7 @@
 package com.testexam.danny.twitsplit.ui.dialog;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -21,5 +22,12 @@ public class MessageDialog {
                     }
                 })
                 .show();
+    }
+
+    public static final ProgressDialog showProgressDialog(Context context,ProgressDialog progressDialog){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Twit twit...");
+        progressDialog.setCancelable(false);
+        return progressDialog;
     }
 }

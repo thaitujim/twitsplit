@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".ui.activities.MessageDetailActivity">
         </activity>
+        <service android:enabled="true" android:name=".services.TweetUploadService" />
     </application>
 
 </manifest>
